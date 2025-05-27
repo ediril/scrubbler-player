@@ -268,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update time display
     videoPlayer.addEventListener('timeupdate', updateInfoPanel);
+    fullscreenVideo.addEventListener('timeupdate', updateInfoPanel);
 
     // Handle fullscreen changes
     document.addEventListener('fullscreenchange', () => {
