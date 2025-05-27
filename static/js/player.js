@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
     const videoPlayer = document.getElementById('videoPlayer');
     const fullscreenVideo = document.getElementById('fullscreenVideo');
     const videoContainer = document.querySelector('.video-container');
@@ -11,38 +12,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const playbackSpeedDisplay = document.getElementById('playbackSpeed');
     const playStateDisplay = document.getElementById('playState');
     let controlsVisible = false; // Start with controls hidden
+    let isInitialized = false; // Track initialization state
 
     // Initialize video players
-    videoPlayer.controls = controlsVisible;
-    fullscreenVideo.controls = controlsVisible;
-    videoPlayer.style.display = 'block';
-    fullscreenVideo.style.display = 'block';
-    videoPlayer.style.width = '100%';
-    fullscreenVideo.style.width = '100%';
-    videoPlayer.style.height = 'auto';
-    fullscreenVideo.style.height = 'auto';
-    videoPlayer.style.backgroundColor = '#000';
-    fullscreenVideo.style.backgroundColor = '#000';
+    function initializePlayer() {
+        console.log('Initializing player...');
+        try {
+            videoPlayer.controls = controlsVisible;
+            fullscreenVideo.controls = controlsVisible;
+            videoPlayer.style.display = 'none'; // Hide video player initially
+            fullscreenVideo.style.display = 'none'; // Hide fullscreen video initially
+            videoContainer.style.display = 'none'; // Hide video container initially
+            videoPlayer.style.width = '100%';
+            fullscreenVideo.style.width = '100%';
+            videoPlayer.style.height = 'auto';
+            fullscreenVideo.style.height = 'auto';
+            videoPlayer.style.backgroundColor = '#000';
+            fullscreenVideo.style.backgroundColor = '#000';
 
-    // Add click handlers for play/pause
-    videoPlayer.addEventListener('click', () => {
-        if (videoPlayer.paused) {
-            videoPlayer.play();
-        } else {
-            videoPlayer.pause();
-        }
-    });
+            // Add click handlers for play/pause
+            videoPlayer.addEventListener('click', () => {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                } else {
+                    videoPlayer.pause();
+                }
+            });
 
-    fullscreenVideo.addEventListener('click', () => {
-        if (fullscreenVideo.paused) {
-            fullscreenVideo.play();
-        } else {
-            fullscreenVideo.pause();
+            fullscreenVideo.addEventListener('click', () => {
+                if (fullscreenVideo.paused) {
+                    fullscreenVideo.play();
+                } else {
+                    fullscreenVideo.pause();
+                }
+            });
+
+            // Show select video button once initialization is complete
+            selectVideoBtn.style.display = 'block';
+            isInitialized = true;
+            console.log('Player initialization complete');
+        } catch (error) {
+            console.error('Error during player initialization:', error);
         }
-    });
+    }
+
+    // Initialize the player
+    initializePlayer();
 
     // Function to reset video player state
     function resetVideoPlayer() {
+        console.log('Resetting video player...');
         videoPlayer.pause();
         fullscreenVideo.pause();
         videoPlayer.src = '';
@@ -52,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         videoContainer.classList.remove('show');
         fullscreenContainer.classList.remove('show');
         loadingContainer.classList.remove('show');
+        videoPlayer.style.display = 'none'; // Hide video player
+        fullscreenVideo.style.display = 'none'; // Hide fullscreen video
+        videoContainer.style.display = 'none'; // Hide video container
         currentTimeDisplay.textContent = '00:00.000';
         playbackSpeedDisplay.textContent = '1.00x';
         playStateDisplay.textContent = 'PAUSED';
@@ -84,7 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to load and play video
     function loadAndPlayVideo(file) {
-        if (!file) return;
+        if (!file) {
+            console.log('No file provided');
+            return;
+        }
 
         console.log('Starting video load process...');
         console.log('File details:', {
@@ -99,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingProgressBar.style.width = '0%';
 
         // Show video container
+        videoContainer.style.display = 'block'; // Show video container
         videoContainer.classList.add('show');
         console.log('Video container shown');
 
@@ -117,6 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Duration:', videoPlayer.duration);
             console.log('Dimensions:', videoPlayer.videoWidth + 'x' + videoPlayer.videoHeight);
             loadingProgressBar.style.width = '50%';
+            // Show video players once metadata is loaded
+            videoPlayer.style.display = 'block';
+            fullscreenVideo.style.display = 'block';
         };
 
         videoPlayer.onloadeddata = () => {
@@ -147,6 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             loadingText.textContent = 'Error loading video - Please try a different file';
             videoContainer.classList.remove('show');
+            videoContainer.style.display = 'none'; // Hide video container on error
+            videoPlayer.style.display = 'none'; // Hide video player on error
+            fullscreenVideo.style.display = 'none'; // Hide fullscreen video on error
             URL.revokeObjectURL(videoURL);
         };
 
@@ -204,17 +236,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle video selection
     selectVideoBtn.addEventListener('click', () => {
+        console.log('Select video button clicked, initialized:', isInitialized);
+        if (!isInitialized) {
+            console.log('Player not yet initialized, please wait...');
+            return;
+        }
+
         // Reset any existing video state
         resetVideoPlayer();
 
+        // Create and configure file input
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'video/*';
+        fileInput.style.display = 'none'; // Hide the input
+        document.body.appendChild(fileInput); // Add to DOM
         
+        // Add change event listener before clicking
         fileInput.addEventListener('change', (e) => {
-            loadAndPlayVideo(e.target.files[0]);
+            console.log('File selected:', e.target.files);
+            if (e.target.files && e.target.files[0]) {
+                loadAndPlayVideo(e.target.files[0]);
+            }
+            // Clean up the input element
+            document.body.removeChild(fileInput);
         });
 
+        // Trigger file selection
         fileInput.click();
     });
 
@@ -262,24 +310,60 @@ document.addEventListener('DOMContentLoaded', () => {
             
             case 'ArrowLeft':
                 e.preventDefault();
-                activeVideo.currentTime = Math.max(0, activeVideo.currentTime - 0.5);
+                // Seek backward in smaller increments
+                const seekBackward = () => {
+                    activeVideo.currentTime = Math.max(0, activeVideo.currentTime - 0.2);
+                    updateInfoPanel();
+                };
+                seekBackward();
+                // If key is held down, continue seeking
+                if (!e.repeat) {
+                    const interval = setInterval(() => {
+                        if (!e.getModifierState('Shift')) {
+                            clearInterval(interval);
+                            return;
+                        }
+                        seekBackward();
+                    }, 50);
+                    document.addEventListener('keyup', () => clearInterval(interval), { once: true });
+                }
                 break;
             
             case 'ArrowRight':
                 e.preventDefault();
-                activeVideo.currentTime = Math.min(activeVideo.duration, activeVideo.currentTime + 0.5);
+                // Seek forward in smaller increments
+                const seekForward = () => {
+                    activeVideo.currentTime = Math.min(activeVideo.duration, activeVideo.currentTime + 0.2);
+                    updateInfoPanel();
+                };
+                seekForward();
+                // If key is held down, continue seeking
+                if (!e.repeat) {
+                    const interval = setInterval(() => {
+                        if (!e.getModifierState('Shift')) {
+                            clearInterval(interval);
+                            return;
+                        }
+                        seekForward();
+                    }, 50);
+                    document.addEventListener('keyup', () => clearInterval(interval), { once: true });
+                }
                 break;
             
             case 'ArrowUp':
                 e.preventDefault();
-                activeVideo.playbackRate = Math.min(2, activeVideo.playbackRate + 0.25);
-                updateInfoPanel();
+                if (activeVideo.playbackRate < 2) {
+                    activeVideo.playbackRate = Math.min(2, activeVideo.playbackRate + 0.25);
+                    updateInfoPanel();
+                }
                 break;
             
             case 'ArrowDown':
                 e.preventDefault();
-                activeVideo.playbackRate = Math.max(0.25, activeVideo.playbackRate - 0.25);
-                updateInfoPanel();
+                if (activeVideo.playbackRate > 0.25) {
+                    activeVideo.playbackRate = Math.max(0.25, activeVideo.playbackRate - 0.25);
+                    updateInfoPanel();
+                }
                 break;
 
             case 'KeyF':
