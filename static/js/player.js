@@ -293,19 +293,10 @@ setInterval(() => {
 function updateInfoPanel() {
     if (!player) return;
     
-    const currentTime = player.getCurrentTime();
     const state = player.getPlayerState();
     
-    //document.getElementById('currentTime').textContent = formatTime(currentTime);
     document.getElementById('playbackSpeed').textContent = currentPlaybackRate.toFixed(2) + 'x';
     document.getElementById('playState').textContent = getStateText(state);
-}
-
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    seconds = Math.floor(seconds % 60);
-    const milliseconds = Math.floor((seconds % 1) * 1000);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
 }
 
 function getStateText(state) {
