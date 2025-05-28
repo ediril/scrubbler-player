@@ -1,3 +1,22 @@
-venv/
+# PHP specific
+*.log
+composer.phar
+vendor/
+.env
 
+# System files
 .DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Cache files
+*.cache

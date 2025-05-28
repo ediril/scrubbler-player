@@ -14,6 +14,4 @@ desktop application using Electron framework in the future if necessary
 
 
 # How to run
-$ python -m venv venv
-$ . venv/activate/bin
-$ python app.py
+$ php -S localhost:5000
