@@ -8,6 +8,15 @@ declare(strict_types=1);
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestPath = parse_url($requestUri, PHP_URL_PATH);
 
+// Get the base path (subfolder) from the script name
+$scriptName = $_SERVER['SCRIPT_NAME'];
+$basePath = dirname($scriptName);
+
+// Remove the base path from the request path
+if ($basePath !== '/' && $basePath !== '\\' && str_starts_with($requestPath, $basePath)) {
+    $requestPath = substr($requestPath, strlen($basePath));
+}
+
 // Remove leading slash
 $requestPath = ltrim($requestPath, '/');
 
@@ -71,7 +80,16 @@ function serveMainPage(): void {
 // Helper function to generate URLs for static files (replaces Flask's url_for)
 function url_for(string $endpoint, string $filename = ''): string {
     if ($endpoint === 'static') {
-        return "/static/$filename";
+        // Get the base path from the current script
+        $scriptName = $_SERVER['SCRIPT_NAME'];
+        $basePath = dirname($scriptName);
+        
+        // Normalize the base path
+        if ($basePath === '/' || $basePath === '\\') {
+            $basePath = '';
+        }
+        
+        return "$basePath/static/$filename";
     }
     return '/';
 }
