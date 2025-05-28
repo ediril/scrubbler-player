@@ -58,6 +58,73 @@ function onPlayerReady(event) {
     }
 }
 
+// Unified keyboard handler for all modes
+function handleKeydown(e) {
+    if (!player) return;
+    
+    // Don't handle keyboard events if user is typing in an input field
+    if (document.activeElement.tagName === 'INPUT' || 
+        document.activeElement.tagName === 'TEXTAREA' ||
+        document.activeElement.isContentEditable) {
+        return;
+    }
+    
+    console.log('Keydown:', e.code);
+    
+    switch(e.code) {
+        case 'Space':
+            e.preventDefault();
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                // Try to hide the pause overlay
+                document.querySelector(".ytp-pause-overlay-container")?.remove();
+            } else {
+                player.playVideo();
+            }
+            break;
+            
+        case 'ArrowLeft':
+            e.preventDefault();
+            player.seekTo(player.getCurrentTime() - 0.5, true);
+            break;
+            
+        case 'ArrowRight':
+            e.preventDefault();
+            player.seekTo(player.getCurrentTime() + 0.5, true);
+            break;
+            
+        case 'ArrowUp':
+            e.preventDefault();
+            currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
+            player.setPlaybackRate(currentPlaybackRate);
+            showSpeedNotification(currentPlaybackRate);
+            break;
+            
+        case 'ArrowDown':
+            e.preventDefault();
+            currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
+            player.setPlaybackRate(currentPlaybackRate);
+            showSpeedNotification(currentPlaybackRate);
+            break;
+            
+        case 'KeyF':
+            e.preventDefault();
+            toggleCustomFullscreen();
+            break;
+            
+        case 'Escape':
+            if (isFullscreen) {
+                e.preventDefault();
+                toggleCustomFullscreen();
+            }
+            break;
+    }
+    
+    // Update the info panel
+    updateInfoPanel();
+}
+
 // Set up the keyboard capture overlay
 function setupKeyboardCapture() {
     const overlay = document.getElementById('keyboardCaptureOverlay');
@@ -67,67 +134,7 @@ function setupKeyboardCapture() {
     overlay.focus({ preventScroll: true });
     
     // Add keyboard event listener to the overlay
-    overlay.addEventListener('keydown', function(e) {
-        // Don't handle keyboard events if user is typing in an input field
-        if (document.activeElement.tagName === 'INPUT' || 
-            document.activeElement.tagName === 'TEXTAREA' ||
-            document.activeElement.isContentEditable) {
-            return;
-        }
-        
-        console.log('Overlay keydown:', e.code);
-        
-        // Handle specific keys
-        switch(e.code) {
-            case 'Space':
-                e.preventDefault();
-                console.log('Space key - play/pause');
-                const state = player.getPlayerState();
-                if (state === YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
-                break;
-                
-            case 'ArrowLeft':
-                e.preventDefault();
-                console.log('Left arrow - rewinding');
-                player.seekTo(player.getCurrentTime() - 0.5, true);
-                break;
-                
-            case 'ArrowRight':
-                e.preventDefault();
-                console.log('Right arrow - forwarding');
-                player.seekTo(player.getCurrentTime() + 0.5, true);
-                break;
-                
-            case 'ArrowUp':
-                e.preventDefault();
-                console.log('Up arrow - increasing speed');
-                currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
-                player.setPlaybackRate(currentPlaybackRate);
-                showSpeedNotification(currentPlaybackRate);
-                break;
-                
-            case 'ArrowDown':
-                e.preventDefault();
-                console.log('Down arrow - decreasing speed');
-                currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
-                player.setPlaybackRate(currentPlaybackRate);
-                showSpeedNotification(currentPlaybackRate);
-                break;
-                
-            case 'KeyF':
-                e.preventDefault();
-                console.log('F key - fullscreen');
-                toggleCustomFullscreen();
-                break;
-        }
-        
-        // Update the display
-        updateInfoPanel();
-    });
+    overlay.addEventListener('keydown', handleKeydown);
     
     // Maintain focus on the overlay periodically, but not when user is in an input
     setInterval(() => {
@@ -176,7 +183,7 @@ function toggleFullscreen() {
         fullscreenContainer.requestFullscreen();
         
         // Setup keyboard events for fullscreen mode
-        document.addEventListener('keydown', handleFullscreenKeydown);
+        document.addEventListener('keydown', handleKeydown);
         
         // Update the display
         document.body.classList.add('custom-fullscreen-active');
@@ -187,7 +194,7 @@ function toggleFullscreen() {
         }
         
         // Remove the custom fullscreen container after exit
-        document.removeEventListener('keydown', handleFullscreenKeydown);
+        document.removeEventListener('keydown', handleKeydown);
         const customFullscreen = document.getElementById('customFullscreen');
         if (customFullscreen) {
             customFullscreen.remove();
@@ -198,59 +205,6 @@ function toggleFullscreen() {
     }
     
     isFullscreen = !isFullscreen;
-}
-
-// Handle keydown events in fullscreen mode
-function handleFullscreenKeydown(e) {
-    if (!player) return;
-    
-    console.log('Fullscreen keydown:', e.code);
-    
-    switch(e.code) {
-        case 'Space':
-            e.preventDefault();
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                document.querySelector(".ytp-pause-overlay-container")?.remove();
-
-            } else {
-                player.playVideo();
-            }
-            break;
-            
-        case 'ArrowLeft':
-            e.preventDefault();
-            player.seekTo(player.getCurrentTime() - 0.5, true);
-            break;
-            
-        case 'ArrowRight':
-            e.preventDefault();
-            player.seekTo(player.getCurrentTime() + 0.5, true);
-            break;
-            
-        case 'ArrowUp':
-            e.preventDefault();
-            currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
-            player.setPlaybackRate(currentPlaybackRate);
-            showSpeedNotification(currentPlaybackRate);
-            break;
-            
-        case 'ArrowDown':
-            e.preventDefault();
-            currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
-            player.setPlaybackRate(currentPlaybackRate);
-            showSpeedNotification(currentPlaybackRate);
-            break;
-            
-        case 'KeyF':
-        case 'Escape':
-            e.preventDefault();
-            toggleFullscreen();
-            break;
-    }
-    
-    // Update the info panel
-    updateInfoPanel();
 }
 
 function onPlayerStateChange(event) {
@@ -344,26 +298,95 @@ document.addEventListener('fullscreenchange', function() {
         console.log('Entered fullscreen via browser API');
         isFullscreen = true;
         
+        // Remove overlay listener to avoid duplicates
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.removeEventListener('keydown', handleKeydown);
+        }
+        
         // Add global keydown handler for fullscreen
-        document.addEventListener('keydown', handleGlobalKeydown);
+        document.removeEventListener('keydown', handleKeydown); // Remove any existing
+        document.addEventListener('keydown', handleKeydown);
     } else {
         console.log('Exited fullscreen via browser API');
         isFullscreen = false;
         
         // Remove global keydown handler
-        document.removeEventListener('keydown', handleGlobalKeydown);
+        document.removeEventListener('keydown', handleKeydown);
+        
+        // Re-add overlay listener for normal mode
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.addEventListener('keydown', handleKeydown);
+        }
     }
 });
 
 // Also handle webkit/moz fullscreen change events for broader browser support
 document.addEventListener('webkitfullscreenchange', function() {
+    const wasFullscreen = isFullscreen;
     isFullscreen = !!document.webkitFullscreenElement;
+    
+    if (isFullscreen && !wasFullscreen) {
+        // Entering fullscreen
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.removeEventListener('keydown', handleKeydown);
+        }
+        document.removeEventListener('keydown', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+    } else if (!isFullscreen && wasFullscreen) {
+        // Exiting fullscreen
+        document.removeEventListener('keydown', handleKeydown);
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.addEventListener('keydown', handleKeydown);
+        }
+    }
 });
+
 document.addEventListener('mozfullscreenchange', function() {
+    const wasFullscreen = isFullscreen;
     isFullscreen = !!document.mozFullScreenElement;
+    
+    if (isFullscreen && !wasFullscreen) {
+        // Entering fullscreen
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.removeEventListener('keydown', handleKeydown);
+        }
+        document.removeEventListener('keydown', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+    } else if (!isFullscreen && wasFullscreen) {
+        // Exiting fullscreen
+        document.removeEventListener('keydown', handleKeydown);
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.addEventListener('keydown', handleKeydown);
+        }
+    }
 });
+
 document.addEventListener('MSFullscreenChange', function() {
+    const wasFullscreen = isFullscreen;
     isFullscreen = !!document.msFullscreenElement;
+    
+    if (isFullscreen && !wasFullscreen) {
+        // Entering fullscreen
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.removeEventListener('keydown', handleKeydown);
+        }
+        document.removeEventListener('keydown', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+    } else if (!isFullscreen && wasFullscreen) {
+        // Exiting fullscreen
+        document.removeEventListener('keydown', handleKeydown);
+        const overlay = document.getElementById('keyboardCaptureOverlay');
+        if (overlay) {
+            overlay.addEventListener('keydown', handleKeydown);
+        }
+    }
 });
 
 // Update info panel every 100ms
@@ -391,8 +414,7 @@ function toggleCustomFullscreen() {
             }
             isFullscreen = true;
             
-            // Add a global keydown handler that works in fullscreen
-            document.addEventListener('keydown', handleGlobalKeydown);
+            // The fullscreenchange event will handle the event listeners
         } catch (err) {
             console.error('Error attempting to enable fullscreen:', err);
         }
@@ -411,71 +433,11 @@ function toggleCustomFullscreen() {
             }
             isFullscreen = false;
             
-            // Remove the global keydown handler
-            document.removeEventListener('keydown', handleGlobalKeydown);
+            // The fullscreenchange event will handle the event listeners
         } catch (err) {
             console.error('Error attempting to exit fullscreen:', err);
         }
     }
-}
-
-// Global keydown handler that works in all modes
-function handleGlobalKeydown(e) {
-    if (!player) return;
-    
-    console.log('Global keydown:', e.code);
-    
-    switch(e.code) {
-        case 'Space':
-            e.preventDefault();
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                // Try to hide the pause overlay
-                document.querySelector(".ytp-pause-overlay-container")?.remove();
-            } else {
-                player.playVideo();
-            }
-            break;
-            
-        case 'ArrowLeft':
-            e.preventDefault();
-            player.seekTo(player.getCurrentTime() - 0.5, true);
-            break;
-            
-        case 'ArrowRight':
-            e.preventDefault();
-            player.seekTo(player.getCurrentTime() + 0.5, true);
-            break;
-            
-        case 'ArrowUp':
-            e.preventDefault();
-            currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
-            player.setPlaybackRate(currentPlaybackRate);
-            showSpeedNotification(currentPlaybackRate);
-            break;
-            
-        case 'ArrowDown':
-            e.preventDefault();
-            currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
-            player.setPlaybackRate(currentPlaybackRate);
-            showSpeedNotification(currentPlaybackRate);
-            break;
-            
-        case 'KeyF':
-            e.preventDefault();
-            toggleCustomFullscreen();
-            break;
-            
-        case 'Escape':
-            if (isFullscreen) {
-                e.preventDefault();
-                toggleCustomFullscreen();
-            }
-            break;
-    }
-    
-    // Update the info panel
-    updateInfoPanel();
 }
 
 // Add event listeners for suggestion buttons
