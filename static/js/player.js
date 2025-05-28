@@ -66,23 +66,6 @@ function setupKeyboardCapture() {
     // Focus the overlay to ensure it captures keyboard events
     overlay.focus();
     
-    // Add focus when clicking on the overlay
-    overlay.addEventListener('click', function(e) {
-        // Don't propagate click to the video
-        e.stopPropagation();
-        
-        // Toggle play/pause on click, like the video
-        const state = player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-        } else {
-            player.playVideo();
-        }
-        
-        // Re-focus the overlay
-        this.focus();
-    });
-    
     // Add keyboard event listener to the overlay
     overlay.addEventListener('keydown', function(e) {
         console.log('Overlay keydown:', e.code);
@@ -131,7 +114,6 @@ function setupKeyboardCapture() {
             case 'KeyF':
                 e.preventDefault();
                 console.log('F key - fullscreen');
-                // Use a custom fullscreen implementation
                 toggleCustomFullscreen();
                 break;
         }
@@ -139,6 +121,13 @@ function setupKeyboardCapture() {
         // Update the display
         updateInfoPanel();
     });
+    
+    // Maintain focus on the overlay periodically
+    setInterval(() => {
+        if (document.activeElement !== overlay) {
+            overlay.focus();
+        }
+    }, 100);
 }
 
 // Helper function to show speed notification
