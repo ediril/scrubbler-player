@@ -103,6 +103,51 @@ button:hover {
     color: #666;
 }
 
+/* Suggested videos section */
+.suggested-videos {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.suggested-videos h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.video-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.suggestion-link {
+    display: block;
+    padding: 8px 12px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-width: 180px;
+    text-align: center;
+}
+
+.suggestion-link:hover {
+    background-color: #ff0000;
+    color: white;
+    border-color: #ff0000;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
 .playback-speed-notification {
     position: absolute;
     top: 20px;

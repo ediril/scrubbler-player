@@ -18,9 +18,18 @@
             </div>
         </div>
         <div class="controls">
-            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input" value="https://www.youtube.com/watch?v=Fa5QzuJrDMU">
+            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input">
             <button id="loadVideo">Load Video</button>
         </div>
+        
+        <div class="suggested-videos">
+            <h3>Try These Videos:</h3>
+            <div class="video-suggestions">
+                <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=Fa5QzuJrDMU">Claire de Lune by Claude Debussy</a>
+                <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=TtCEFCxv6Z0">Nocturne in E-flat major (Op. 9 No. 2) by Chopin</a>
+            </div>
+        </div>
+        
         <div class="keyboard-controls">
             <h3>Keyboard Controls:</h3>
             <ul>

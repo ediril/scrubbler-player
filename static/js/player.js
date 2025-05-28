@@ -64,7 +64,7 @@ function setupKeyboardCapture() {
     if (!overlay) return;
     
     // Focus the overlay to ensure it captures keyboard events
-    overlay.focus();
+    overlay.focus({ preventScroll: true });
     
     // Add keyboard event listener to the overlay
     overlay.addEventListener('keydown', function(e) {
@@ -135,7 +135,7 @@ function setupKeyboardCapture() {
             document.activeElement.tagName !== 'INPUT' && 
             document.activeElement.tagName !== 'TEXTAREA' &&
             !document.activeElement.isContentEditable) {
-            overlay.focus();
+            overlay.focus({ preventScroll: true });
         }
     }, 100);
 }
@@ -330,7 +330,7 @@ document.getElementById('loadVideo').addEventListener('click', () => {
         
         // Re-focus on the keyboard capture overlay
         const overlay = document.getElementById('keyboardCaptureOverlay');
-        if (overlay) overlay.focus();
+        if (overlay) overlay.focus({ preventScroll: true });
     } else {
         alert('Please enter a valid YouTube URL');
     }
@@ -477,3 +477,51 @@ function handleGlobalKeydown(e) {
     // Update the info panel
     updateInfoPanel();
 }
+
+// Add event listeners for suggestion buttons
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for suggestion links
+    document.querySelectorAll('.suggestion-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            
+            const url = this.getAttribute('data-url');
+            const videoId = extractVideoId(url);
+            
+            if (videoId && player) {
+                // Update the URL input field
+                document.getElementById('youtubeUrl').value = url;
+                
+                // Stop current video first if one is playing
+                if (player.getPlayerState() === YT.PlayerState.PLAYING || 
+                    player.getPlayerState() === YT.PlayerState.PAUSED) {
+                    player.stopVideo();
+                }
+                
+                // Load and play the new video immediately
+                player.loadVideoById({
+                    videoId: videoId,
+                    startSeconds: 0
+                });
+                
+                // Show the video container when a video is loaded
+                const videoContainer = document.querySelector('.video-container');
+                if (videoContainer) {
+                    videoContainer.classList.add('video-loaded');
+                }
+                
+                // Re-focus on the keyboard capture overlay after a short delay
+                setTimeout(() => {
+                    const overlay = document.getElementById('keyboardCaptureOverlay');
+                    if (overlay) overlay.focus({ preventScroll: true });
+                }, 300);
+                
+                // Add visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            }
+        });
+    });
+});
