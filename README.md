@@ -11,3 +11,9 @@ desktop application using Electron framework in the future if necessary
 - It should use Bulma CSS as css framework
 
 - Don't just add code, feel free to remove code when it is no longer needed, or refactor existing code to make it more efficient or simpler
+
+
+# How to run
+$ python -m venv venv
+$ . venv/activate/bin
+$ python app.py

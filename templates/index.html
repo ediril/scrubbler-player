@@ -3,42 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local Video Player</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <div class="video-container">
-            <video id="videoPlayer">
-                <source src="" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div id="loadingContainer" class="loading-container">
-                <div class="loading-progress">
-                    <div id="loadingProgressBar" class="loading-progress-bar"></div>
-                </div>
-                <div id="loadingText" class="loading-text">Loading video...</div>
-            </div>
+            <div id="player"></div>
+            <!-- Add an invisible overlay to capture keyboard events -->
+            <div id="keyboardCaptureOverlay" class="keyboard-capture-overlay" tabindex="0"></div>
             <div id="infoPanel" class="info-panel">
                 <div id="currentTime">00:00.000</div>
                 <div id="playbackSpeed">1.00x</div>
                 <div id="playState">PAUSED</div>
             </div>
         </div>
-        <div id="fullscreenContainer" class="fullscreen-container">
-            <video id="fullscreenVideo">
-                <source src="" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div id="fullscreenInfoPanel" class="info-panel fullscreen-info">
-                <div id="fullscreenCurrentTime">00:00.000</div>
-                <div id="fullscreenPlaybackSpeed">1.00x</div>
-                <div id="fullscreenPlayState">PAUSED</div>
-            </div>
-        </div>
         <div class="controls">
-            <button id="selectVideo">Select Video</button>
+            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input" value="https://www.youtube.com/watch?v=Fa5QzuJrDMU">
+            <button id="loadVideo">Load Video</button>
         </div>
         <div class="keyboard-controls">
             <h3>Keyboard Controls:</h3>
@@ -53,6 +35,7 @@
             </ul>
         </div>
     </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="{{ url_for('static', filename='js/player.js') }}"></script>
 </body>
-</html> 
+</html>

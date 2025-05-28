@@ -5,19 +5,19 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
+    margin: 0;
     padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -29,74 +29,69 @@ h1 {
 .video-container {
     position: relative;
     width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    background: #000;
-    min-height: 200px;
-    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background-color: #000;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.video-container.show {
-    display: block !important;
-}
-
-.video-container video {
+#player {
     width: 100%;
-    height: auto;
-    display: block;
-    min-height: 200px;
-    background: #000;
+    aspect-ratio: 16/9;
 }
 
 .controls {
-    margin: 20px 0;
-    text-align: center;
+    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
+    gap: 10px;
 }
 
-.controls button {
-    background: #4CAF50;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 12px 24px;
-    font-size: 16px;
+.url-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    transition: background-color 0.3s;
+    font-size: 14px;
 }
 
-.controls button:hover {
-    background: #45a049;
+button {
+    padding: 8px 16px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #cc0000;
 }
 
 .keyboard-controls {
-    margin: 20px auto;
+    background-color: #f8f8f8;
     padding: 15px;
-    background: #f5f5f5;
-    border-radius: 5px;
-    max-width: 400px;
-    text-align: center;
+    border-radius: 4px;
+    margin-top: 20px;
 }
 
 .keyboard-controls h3 {
-    margin-top: 0;
-    color: #333;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
+    font-size: 16px;
 }
 
 .keyboard-controls ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: inline-block;
-    text-align: left;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
 }
 
 .keyboard-controls li {
-    margin: 5px 0;
+    font-size: 14px;
     color: #666;
 }
 
@@ -208,57 +203,28 @@ h1 {
     display: none;
 }
 
-.loading-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 1000;
-}
-
-.loading-container.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.loading-progress {
-    width: 200px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
-    margin: 10px 0;
-    overflow: hidden;
-}
-
-.loading-progress-bar {
-    height: 100%;
-    background: #fff;
-    width: 0;
-    transition: width 0.3s ease;
-}
-
 .info-panel {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0, 0, 0, 0.7);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
     padding: 10px;
-    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
     font-family: monospace;
-    font-size: 14px;
-    z-index: 1000;
-    pointer-events: none;
+    z-index: 1000 !important;
+}
+
+/* Make sure the info panel is visible in fullscreen mode */
+.video-container:fullscreen .info-panel,
+.video-container:-webkit-full-screen .info-panel,
+.video-container:-moz-full-screen .info-panel,
+.video-container:-ms-fullscreen .info-panel {
+    font-size: 16px;
+    padding: 15px;
 }
 
 .fullscreen-info {
@@ -318,4 +284,135 @@ h1 {
     justify-content: center;
     align-items: center;
     min-height: 200px; /* Give some vertical space */
-} 
+}
+
+/* Hide YouTube's "More videos" overlay */
+.ytp-pause-overlay,
+.ytp-pause-overlay-container,
+.ytp-pause-overlay-container.ytp-scroll-min {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Hide YouTube's "More videos" overlay using the ID selector */
+#ytp-pause-overlay-container {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Hide related videos at the end */
+.ytp-endscreen-content {
+    display: none !important;
+}
+
+/* Hide the YouTube logo */
+.ytp-youtube-button {
+    display: none !important;
+}
+
+/* Hide the "More videos" button */
+.ytp-pause-overlay-container {
+    display: none !important;
+}
+
+/* Keyboard capture overlay */
+.keyboard-capture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Custom fullscreen container */
+.custom-fullscreen-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-fullscreen-container .video-container {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    position: relative;
+}
+
+.custom-fullscreen-container #player,
+.custom-fullscreen-container .keyboard-capture-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.custom-fullscreen-container .info-panel {
+    font-size: 16px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+body.custom-fullscreen-active {
+    overflow: hidden;
+}
+
+/* Custom Fullscreen Mode */
+body.custom-fullscreen-mode {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body.custom-fullscreen-mode .container.fullscreen-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #000;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    max-width: none;
+}
+
+body.custom-fullscreen-mode .video-container.fullscreen {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+body.custom-fullscreen-mode #player {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: unset;
+}
+
+body.custom-fullscreen-mode .info-panel {
+    font-size: 16px;
+    padding: 15px;
+}
+
+body.custom-fullscreen-mode .controls,
+body.custom-fullscreen-mode .keyboard-controls {
+    display: none;
+}
