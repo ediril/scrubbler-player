@@ -65,7 +65,7 @@ function serveMainPage(): void {
     header('Content-Type: text/html; charset=utf-8');
     
     // Include the HTML template
-    include 'templates/index.html';
+    include 'templates/index.php';
 }
 
 // Helper function to generate URLs for static files (replaces Flask's url_for)
