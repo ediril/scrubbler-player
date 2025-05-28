@@ -27,6 +27,7 @@
             <div class="video-suggestions">
                 <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=Fa5QzuJrDMU">Claire de Lune by Claude Debussy</a>
                 <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=TtCEFCxv6Z0">Nocturne in E-flat major (Op. 9 No. 2) by Chopin</a>
+                <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=XWWjOR-6faY">Elvis Costello - She</a>
             </div>
         </div>
         
