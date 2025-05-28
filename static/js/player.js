@@ -68,6 +68,13 @@ function setupKeyboardCapture() {
     
     // Add keyboard event listener to the overlay
     overlay.addEventListener('keydown', function(e) {
+        // Don't handle keyboard events if user is typing in an input field
+        if (document.activeElement.tagName === 'INPUT' || 
+            document.activeElement.tagName === 'TEXTAREA' ||
+            document.activeElement.isContentEditable) {
+            return;
+        }
+        
         console.log('Overlay keydown:', e.code);
         
         // Handle specific keys
@@ -122,9 +129,12 @@ function setupKeyboardCapture() {
         updateInfoPanel();
     });
     
-    // Maintain focus on the overlay periodically
+    // Maintain focus on the overlay periodically, but not when user is in an input
     setInterval(() => {
-        if (document.activeElement !== overlay) {
+        if (document.activeElement !== overlay && 
+            document.activeElement.tagName !== 'INPUT' && 
+            document.activeElement.tagName !== 'TEXTAREA' &&
+            !document.activeElement.isContentEditable) {
             overlay.focus();
         }
     }, 100);
@@ -286,7 +296,7 @@ function updateInfoPanel() {
     const currentTime = player.getCurrentTime();
     const state = player.getPlayerState();
     
-    document.getElementById('currentTime').textContent = formatTime(currentTime);
+    //document.getElementById('currentTime').textContent = formatTime(currentTime);
     document.getElementById('playbackSpeed').textContent = currentPlaybackRate.toFixed(2) + 'x';
     document.getElementById('playState').textContent = getStateText(state);
 }
@@ -303,7 +313,7 @@ function getStateText(state) {
         case YT.PlayerState.PLAYING: return 'PLAYING';
         case YT.PlayerState.PAUSED: return 'PAUSED';
         case YT.PlayerState.ENDED: return 'ENDED';
-        default: return 'UNKNOWN';
+        default: return '';
     }
 }
 
@@ -320,6 +330,12 @@ document.getElementById('loadVideo').addEventListener('click', () => {
     
     if (videoId) {
         player.loadVideoById(videoId);
+        
+        // Show the video container when a video is loaded
+        const videoContainer = document.querySelector('.video-container');
+        if (videoContainer) {
+            videoContainer.classList.add('video-loaded');
+        }
         
         // Re-focus on the keyboard capture overlay
         const overlay = document.getElementById('keyboardCaptureOverlay');
