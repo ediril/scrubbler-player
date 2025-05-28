@@ -444,3 +444,50 @@ body.custom-fullscreen-mode .controls,
 body.custom-fullscreen-mode .keyboard-controls {
     display: none;
 }
+
+/* Footer styles */
+.footer {
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 20px;
+    background-color: white;
+    color: #666;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e0e0e0;
+}
+
+.footer .content {
+    /* Remove unnecessary positioning */
+}
+
+.footer p {
+    margin: 4px 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.footer a {
+    color: #333;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.2s ease;
+}
+
+.footer a:hover {
+    color: #ff0000;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    .footer {
+        margin-top: 30px;
+        padding: 15px;
+        border-radius: 4px;
+    }
+    
+    .footer p {
+        font-size: 12px;
+    }
+}
