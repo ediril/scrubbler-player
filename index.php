@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/banalytiq/banalytiq.php';
+record_visit();
+
 // Simple PHP 8 server to replace Flask
 // This serves the main HTML page and static files
 
