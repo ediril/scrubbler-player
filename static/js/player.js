@@ -32,11 +32,9 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     console.log('YouTube player is ready');
     updateInfoPanel();
+
     // Set initial playback rate
     player.setPlaybackRate(currentPlaybackRate);
-    
-    // Auto-play the video
-    player.playVideo();
     
     // Set up the keyboard capture overlay
     setupKeyboardCapture();
@@ -151,7 +149,6 @@ function setupKeyboardCapture() {
 
 // Helper function to show speed notification
 function showSpeedNotification(speed) {
-    const infoPanel = document.getElementById('infoPanel');
     const speedElement = document.getElementById('playbackSpeed');
     if (speedElement) {
         speedElement.textContent = speed.toFixed(2) + 'x';
