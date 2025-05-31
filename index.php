@@ -67,8 +67,16 @@ function serveStaticFile(string $filePath): void {
     header("Content-Type: $contentType");
 
     // Set cache headers for static files
-    header('Cache-Control: public, max-age=3600');
-    header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
+    if ($extension === 'css' || $extension === 'js') {
+        // Disable caching for CSS and JS during development
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+    } else {
+        // Cache other static files
+        header('Cache-Control: public, max-age=3600');
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
+    }
 
     readfile($filePath);
 }
@@ -92,7 +100,19 @@ function url_for(string $endpoint, string $filename = ''): string {
             $basePath = '';
         }
         
-        return "$basePath/static/$filename";
+        $url = "$basePath/static/$filename";
+        
+        // Add cache-busting for CSS and JS files
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        if ($extension === 'css' || $extension === 'js') {
+            $filePath = "static/$filename";
+            if (file_exists($filePath)) {
+                $timestamp = filemtime($filePath);
+                $url .= "?v=$timestamp";
+            }
+        }
+        
+        return $url;
     }
     return '/';
 }
