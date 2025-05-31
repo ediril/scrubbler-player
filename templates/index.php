@@ -39,7 +39,9 @@
         </div>
         <div class="controls">
             <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input">
-            <button id="loadVideo">Load Video</button>
+            <button id="loadVideo" class="icon-btn" title="Load Video">
+                <i class="fas fa-play-circle"></i>
+            </button>
         </div>
         
         <div class="suggested-videos">
