@@ -38,14 +38,14 @@
             </div>
         </div>
         <div class="controls">
-            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input">
+            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL to stary playing" class="url-input">
             <button id="loadVideo" class="icon-btn" title="Load Video">
                 <i class="fas fa-play-circle"></i>
             </button>
         </div>
         
         <div class="suggested-videos">
-            <h3>Try These Videos:</h3>
+            <h3>Try one of these videos:</h3>
             <div class="video-suggestions">
                 <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=Fa5QzuJrDMU">Claire de Lune by Claude Debussy</a>
                 <a href="#" class="suggestion-link" data-url="https://www.youtube.com/watch?v=TtCEFCxv6Z0">Nocturne in E-flat major (Op. 9 No. 2) by Chopin</a>
@@ -53,17 +53,17 @@
             </div>
         </div>
         
-        <div class="keyboard-controls">
+<!--        <div class="keyboard-controls">
             <h3>Keyboard Controls:</h3>
             <ul>
                 <li>Space: Play/Pause</li>
                 <li>←: Rewind 0.5 seconds</li>
                 <li>→: Forward 0.5 seconds</li>
-                <li>↑: Increase playback speed</li>
-                <li>↓: Decrease playback speed</li>
+                <li>+: Increase playback speed</li>
+                <li>-: Decrease playback speed</li>
                 <li>F: Toggle fullscreen</li>
             </ul>
-        </div>
+        </div> -->
     </div>
     <footer class="footer">
         <div class="content has-text-centered">

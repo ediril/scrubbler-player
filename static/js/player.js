@@ -94,14 +94,16 @@ function handleKeydown(e) {
             player.seekTo(player.getCurrentTime() + 0.5, true);
             break;
             
-        case 'ArrowUp':
+        case 'Equal':  // + key
+        case 'NumpadAdd':  // Numpad + key
             e.preventDefault();
             currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
             player.setPlaybackRate(currentPlaybackRate);
             showSpeedNotification(currentPlaybackRate);
             break;
             
-        case 'ArrowDown':
+        case 'Minus':  // - key
+        case 'NumpadSubtract':  // Numpad - key
             e.preventDefault();
             currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
             player.setPlaybackRate(currentPlaybackRate);
