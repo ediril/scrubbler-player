@@ -9,6 +9,8 @@ body {
     padding: 20px;
     font-family: Arial, sans-serif;
     background-color: #40b0e0;
+    /* Prevent double-tap zoom on mobile/tablet */
+    touch-action: manipulation;
 }
 
 .container {
@@ -19,6 +21,8 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 h1 {
@@ -41,6 +45,8 @@ h2 {
     border-radius: 4px;
     overflow: hidden;
     display: none; /* Hidden by default until video is loaded */
+    /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 .video-container.video-loaded {
@@ -50,6 +56,8 @@ h2 {
 #player {
     width: 100%;
     aspect-ratio: 16/9;
+    /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 .controls {
@@ -547,6 +555,8 @@ body.custom-fullscreen-mode .keyboard-controls {
     align-items: center;
     gap: 10px;
     height: 50px;
+    /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 .control-btn {
@@ -564,6 +574,8 @@ body.custom-fullscreen-mode .keyboard-controls {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 .control-btn:hover {
