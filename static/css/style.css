@@ -508,10 +508,6 @@ body.custom-fullscreen-mode .keyboard-controls {
     text-align: center;
 }
 
-.footer .content {
-    /* Remove unnecessary positioning */
-}
-
 .footer p {
     margin: 4px 0;
     line-height: 1.4;

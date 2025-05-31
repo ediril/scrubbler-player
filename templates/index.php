@@ -3,6 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Scrubbler - Piano Learning Player">
+    <meta property="og:description" content="A special player to learn piano from synesthesia videos on YouTube. Practice with adjustable playback speed and intuitive controls.">
+    <meta property="og:image" content="<?php echo ($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://' . $_SERVER['HTTP_HOST'] . url_for('static', 'img/og-preview.jpg'); ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    <meta property="og:url" content="<?php echo ($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    <meta property="og:site_name" content="Scrubbler">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scrubbler - Piano Learning Player">
+    <meta name="twitter:description" content="A special player to learn piano from synesthesia videos on YouTube. Practice with adjustable playback speed and intuitive controls.">
+    <meta name="twitter:image" content="<?php echo ($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://' . $_SERVER['HTTP_HOST'] . url_for('static', 'img/og-preview.jpg'); ?>">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="description" content="A special player to learn piano from synesthesia videos on YouTube. Practice with adjustable playback speed and intuitive controls.">
+    <meta name="keywords" content="piano, learning, youtube, synesthesia, music, practice, player">
+    
     <link rel="stylesheet" href="<?php echo url_for('static', 'css/style.css'); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
