@@ -149,18 +149,17 @@ function setupKeyboardCapture() {
 
 // Helper function to show speed notification
 function showSpeedNotification(speed) {
-    const notification = document.createElement('div');
-    notification.textContent = `Speed: ${speed.toFixed(2)}x`;
-    notification.style.position = 'fixed';
-    notification.style.top = '20px';
-    notification.style.right = '20px';
-    notification.style.background = 'rgba(0,0,0,0.7)';
-    notification.style.color = 'white';
-    notification.style.padding = '10px';
-    notification.style.borderRadius = '5px';
-    notification.style.zIndex = '9999';
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 1500);
+    const infoPanel = document.getElementById('infoPanel');
+    const speedElement = document.getElementById('playbackSpeed');
+    if (speedElement) {
+        speedElement.textContent = speed.toFixed(2) + 'x';
+        // Add a highlight effect
+        speedElement.style.transition = 'color 0.3s ease';
+        speedElement.style.color = '#ff4444';
+        setTimeout(() => {
+            speedElement.style.color = '#ffeeee';
+        }, 300);
+    }
 }
 
 // Helper function to toggle fullscreen
