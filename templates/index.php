@@ -16,6 +16,26 @@
                 <div id="playbackSpeed">1.00x</div>
                 <div id="playState">PAUSED</div>
             </div>
+            <div id="mobileControls" class="mobile-controls">
+                <button class="control-btn" id="fullscreenBtn" title="Toggle Fullscreen">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button class="control-btn" id="rewindBtn" title="Rewind 0.5s">
+                    <i class="fas fa-backward"></i>
+                </button>
+                <button class="control-btn" id="playPauseBtn" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn" id="forwardBtn" title="Forward 0.5s">
+                    <i class="fas fa-forward"></i>
+                </button>
+                <button class="control-btn" id="speedDownBtn" title="Decrease Speed">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="control-btn" id="speedUpBtn" title="Increase Speed">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
         </div>
         <div class="controls">
             <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" class="url-input">

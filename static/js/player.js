@@ -403,16 +403,34 @@ function toggleCustomFullscreen() {
         console.log('Entering fullscreen');
         // Try to enter fullscreen
         try {
-            if (videoContainer.requestFullscreen) {
-                videoContainer.requestFullscreen();
-            } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
-                videoContainer.mozRequestFullScreen();
-            } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                videoContainer.webkitRequestFullscreen();
-            } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
-                videoContainer.msRequestFullscreen();
+            // Check if we're on iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                // For iOS, we'll use a custom fullscreen approach
+                document.body.classList.add('ios-fullscreen');
+                videoContainer.classList.add('ios-fullscreen');
+                isFullscreen = true;
+                
+                // Lock screen orientation if possible
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(() => {
+                        console.log('Orientation lock not supported');
+                    });
+                }
+            } else {
+                // Standard fullscreen for other devices
+                if (videoContainer.requestFullscreen) {
+                    videoContainer.requestFullscreen();
+                } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
+                    videoContainer.mozRequestFullScreen();
+                } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    videoContainer.webkitRequestFullscreen();
+                } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
+                    videoContainer.msRequestFullscreen();
+                }
+                isFullscreen = true;
             }
-            isFullscreen = true;
             
             // The fullscreenchange event will handle the event listeners
         } catch (err) {
@@ -422,16 +440,32 @@ function toggleCustomFullscreen() {
         console.log('Exiting fullscreen');
         // Exit fullscreen
         try {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) { /* Firefox */
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) { /* Chrome, Safari & Opera */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE/Edge */
-                document.msExitFullscreen();
+            // Check if we're on iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                // For iOS, remove our custom fullscreen classes
+                document.body.classList.remove('ios-fullscreen');
+                videoContainer.classList.remove('ios-fullscreen');
+                isFullscreen = false;
+                
+                // Unlock screen orientation if possible
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } else {
+                // Standard fullscreen exit for other devices
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { /* Firefox */
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { /* Chrome, Safari & Opera */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE/Edge */
+                    document.msExitFullscreen();
+                }
+                isFullscreen = false;
             }
-            isFullscreen = false;
             
             // The fullscreenchange event will handle the event listeners
         } catch (err) {
@@ -486,4 +520,90 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Mobile control buttons event listeners
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const rewindBtn = document.getElementById('rewindBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const speedUpBtn = document.getElementById('speedUpBtn');
+    const speedDownBtn = document.getElementById('speedDownBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Update play/pause button icon based on player state
+    function updatePlayPauseIcon(state) {
+        if (playPauseBtn) {
+            const icon = playPauseBtn.querySelector('i');
+            if (icon) {
+                icon.className = state === YT.PlayerState.PLAYING ? 'fas fa-pause' : 'fas fa-play';
+            }
+        }
+    }
+
+    // Add event listener for player state changes
+    if (player) {
+        player.addEventListener('onStateChange', function(event) {
+            updatePlayPauseIcon(event.data);
+        });
+    }
+
+    // Play/Pause button
+    if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', function() {
+            if (!player) return;
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        });
+    }
+
+    // Rewind button
+    if (rewindBtn) {
+        rewindBtn.addEventListener('click', function() {
+            if (!player) return;
+            player.seekTo(player.getCurrentTime() - 0.5, true);
+        });
+    }
+
+    // Forward button
+    if (forwardBtn) {
+        forwardBtn.addEventListener('click', function() {
+            if (!player) return;
+            player.seekTo(player.getCurrentTime() + 0.5, true);
+        });
+    }
+
+    // Speed up button
+    if (speedUpBtn) {
+        speedUpBtn.addEventListener('click', function() {
+            if (!player) return;
+            currentPlaybackRate = Math.min(currentPlaybackRate + 0.25, 2);
+            player.setPlaybackRate(currentPlaybackRate);
+            showSpeedNotification(currentPlaybackRate);
+        });
+    }
+
+    // Speed down button
+    if (speedDownBtn) {
+        speedDownBtn.addEventListener('click', function() {
+            if (!player) return;
+            currentPlaybackRate = Math.max(currentPlaybackRate - 0.25, 0.25);
+            player.setPlaybackRate(currentPlaybackRate);
+            showSpeedNotification(currentPlaybackRate);
+        });
+    }
+
+    // Fullscreen button
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', function() {
+            toggleCustomFullscreen();
+            // Update fullscreen button icon
+            const icon = fullscreenBtn.querySelector('i');
+            if (icon) {
+                icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+            }
+        });
+    }
 });
