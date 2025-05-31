@@ -249,18 +249,16 @@ function updateInfoPanel() {
     if (!player) return;
     
     const state = player.getPlayerState();
-    
-    document.getElementById('playbackSpeed').textContent = currentPlaybackRate.toFixed(2) + 'x';
-    document.getElementById('playState').textContent = getStateText(state);
-}
-
-function getStateText(state) {
-    switch(state) {
-        case YT.PlayerState.PLAYING: return 'PLAYING';
-        case YT.PlayerState.PAUSED: return 'PAUSED';
-        case YT.PlayerState.ENDED: return 'ENDED';
-        default: return '';
+    const playStateElement = document.getElementById('playState');
+        
+    let iconHTML = '';
+    if (state === YT.PlayerState.PLAYING) {
+        iconHTML = '<i class="fas fa-play play-icon"></i>';
+    } else if (state === YT.PlayerState.PAUSED) {
+        iconHTML = '<i class="fas fa-pause play-icon"></i>';
     }
+
+    document.getElementById('playbackSpeed').innerHTML = currentPlaybackRate.toFixed(2) + 'x ' + iconHTML;
 }
 
 function extractVideoId(url) {

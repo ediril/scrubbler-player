@@ -322,17 +322,6 @@ button:hover {
     margin: 5px 0;
 }
 
-#playState, #fullscreenPlayState {
-    color: #ffeeee;
-    font-weight: bold;
-}
-
-#playState:not(:empty)::before,
-#fullscreenPlayState:not(:empty)::before {
-    content: '▶ ';
-    color: #ff4444;
-}
-
 .select-video-btn {
     display: none; /* Hidden by default, shown by JavaScript */
     padding: 12px 24px;

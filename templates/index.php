@@ -13,8 +13,7 @@
             <div id="player"></div>
             <div id="keyboardCaptureOverlay" class="keyboard-capture-overlay" tabindex="0"></div>
             <div id="infoPanel" class="info-panel">
-                <div id="playbackSpeed">1.00x</div>
-                <div id="playState">PAUSED</div>
+                <div id="playbackSpeed"></div>
             </div>
             <div id="mobileControls" class="mobile-controls">
                 <button class="control-btn" id="fullscreenBtn" title="Toggle Fullscreen">
