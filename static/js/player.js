@@ -595,11 +595,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fullscreenBtn) {
         fullscreenBtn.addEventListener('click', function() {
             toggleCustomFullscreen();
-            // Update fullscreen button icon
-            const icon = fullscreenBtn.querySelector('i');
-            if (icon) {
-                icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
-            }
         });
     }
 });

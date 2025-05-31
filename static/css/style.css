@@ -537,7 +537,7 @@ body.custom-fullscreen-mode .keyboard-controls {
 .mobile-controls {
     display: none; /* Hidden by default, shown on mobile/tablet */
     position: absolute;
-    bottom: 50px;
+    top: 0;
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.7);
@@ -581,7 +581,7 @@ body.custom-fullscreen-mode .keyboard-controls {
 }
 
 /* Show mobile controls on tablet and phone screens */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .mobile-controls {
         display: flex;
     }
