@@ -43,8 +43,8 @@ function onPlayerReady(event) {
     const playerContainer = document.querySelector('.video-container');
     if (playerContainer) {
         playerContainer.addEventListener('click', (e) => {
-            // Ignore clicks on the info panel
-            if (e.target.closest('#infoPanel')) return;
+            // Ignore clicks on the info panel and mobile controls
+            if (e.target.closest('#infoPanel') || e.target.closest('#mobileControls')) return;
             
             const state = player.getPlayerState();
             if (state === YT.PlayerState.PLAYING) {
