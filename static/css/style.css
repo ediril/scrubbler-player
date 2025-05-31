@@ -133,11 +133,15 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 4px;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 15px;
     transition: all 0.2s ease;
-    white-space: nowrap;
+    white-space: normal;
     min-width: 180px;
+    max-width: 100%;
     text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .suggestion-link:hover {
@@ -146,6 +150,20 @@ button:hover {
     border-color: #ff0000;
     transform: translateY(-1px);
     text-decoration: none;
+}
+
+/* Add responsive styles for small screens */
+@media (max-width: 480px) {
+    .suggestion-link {
+        font-size: 14px;
+        padding: 8px 12px;
+        min-width: 150px;
+    }
+    
+    .video-suggestions {
+        width: 100%;
+        padding: 0 10px;
+    }
 }
 
 /* Fullscreen styles */
