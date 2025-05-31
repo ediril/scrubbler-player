@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Scrubbler Player</h1>
+    <h1>Scrubbler</h1>
+    <h2>A special player to learn piano from synesthesia videos on YouTube</h2>
     <div class="container">
         <div class="video-container">
             <div id="player"></div>
