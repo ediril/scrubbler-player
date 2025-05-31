@@ -597,4 +597,27 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleCustomFullscreen();
         });
     }
+
+    // Set up keyboard shortcuts toggle
+    setupKeyboardShortcutsToggle();
 });
+
+function setupKeyboardShortcutsToggle() {
+    const toggleBtn = document.getElementById('keyboardShortcutsBtn');
+    const keyboardControls = document.getElementById('keyboardControls');
+    
+    if (toggleBtn && keyboardControls) {
+        toggleBtn.addEventListener('click', () => {
+            keyboardControls.classList.toggle('show');
+            
+            // Update button text based on state
+            const isVisible = keyboardControls.classList.contains('show');
+            
+            if (isVisible) {
+                toggleBtn.innerHTML = '<i class="fas fa-keyboard"></i> Hide Keyboard Shortcuts';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-keyboard"></i> Keyboard Shortcuts';
+            }
+        });
+    }
+}

@@ -74,7 +74,14 @@
             </div>
         </div>
         
-<!--        <div class="keyboard-controls">
+        <div class="keyboard-shortcuts-container">
+            <button id="keyboardShortcutsBtn" class="keyboard-shortcuts-btn">
+                <i class="fas fa-keyboard"></i>
+                Keyboard Shortcuts
+            </button>
+        </div>
+        
+        <div class="keyboard-controls" id="keyboardControls">
             <h3>Keyboard Controls:</h3>
             <ul>
                 <li>Space: Play/Pause</li>
@@ -84,7 +91,7 @@
                 <li>-: Decrease playback speed</li>
                 <li>F: Toggle fullscreen</li>
             </ul>
-        </div> -->
+        </div>
     </div>
     <footer class="footer">
         <div class="content has-text-centered">
